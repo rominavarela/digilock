@@ -45,10 +45,11 @@ public class DirectoryUtils {
 		if ( dir.exists() && dir.isDirectory() )
 		{
 			for ( File f: dir.listFiles() )
-				if ( f.isFile())
-					content.add(f);
-				else if(recursiveLookup)
+			{
+				content.add(f);
+				if(recursiveLookup && f.isDirectory())
 					content.addAll(this.getDirectoryContent(f, true));
+			}
 		}
 		
 		return content;
@@ -72,14 +73,14 @@ public class DirectoryUtils {
 				
 				FileGroup g= null;
 				for(FileGroup group: this.lockedGroups)
-					if(group.getWatermark().contentEquals(watermark))
+					if(group.getFootprint().contentEquals(watermark))
 						g= group;
 				
 				if(g==null)
 				{
 					g= new FileGroup();
 					g.setIsLooked(true);
-					g.setWatermark(watermark);
+					g.setFootprint(watermark);
 					g.setFiles(new ArrayList<File>());
 					this.lockedGroups.add(g);
 				}
@@ -89,7 +90,7 @@ public class DirectoryUtils {
 			else
 				this.unlockedFiles.add(f);
 			
-			flag= !flag;
+			//flag= !flag;
 		}
 		
 	}

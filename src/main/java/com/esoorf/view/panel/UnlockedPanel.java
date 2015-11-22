@@ -2,12 +2,14 @@ package com.esoorf.view.panel;
 
 import java.awt.GridLayout;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import com.esoorf.enums.Actions;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;
@@ -16,11 +18,13 @@ import com.esoorf.view.component.FileElement;
 public class UnlockedPanel {
 	public JSplitPane panel;
 	
-	JLabel titleLabel;
-	JPanel titlePanel;
+	private JLabel titleLabel;
+	private JPanel titlePanel;
 	
-	JPanel unlockedList;
-	JScrollPane unlockedPane;
+	private JPanel unlockedList;
+	private JScrollPane unlockedPane;
+	
+	private ArrayList<FileElement> fileElements;
 	
 	UnlockedPanel() {
 		this.panel= new JSplitPane();
@@ -36,6 +40,8 @@ public class UnlockedPanel {
 		
 		this.unlockedList= new JPanel();
 		this.unlockedList.setLayout(new GridLayout(0, 1));
+		
+		this.fileElements= new ArrayList<FileElement>();
 		this.updateList();
 		this.unlockedPane= new JScrollPane(this.unlockedList);
 		
@@ -46,14 +52,44 @@ public class UnlockedPanel {
 	
 	public void updateList() {
 		this.unlockedList.removeAll();
-		for(File f:DirectoryUtils.getInstance().getUnlockedFiles())
+		this.fileElements.clear();
+		
+		DirectoryUtils dir= DirectoryUtils.getInstance();
+		FileElement root= new FileElement(dir.getWorkingDirectory());
+		root.setActions(Actions.LOCK);
+		this.fileElements.add(root);
+
+		FileElement parent= root;
+		FileElement pointer= parent;
+		for(File f:dir.getUnlockedFiles())
 		{
-			FileElement fileElement= new FileElement(f);
-			this.unlockedList.add(fileElement.panel);
+			//set item
+			FileElement child= new FileElement(f);
+			child.setActions(Actions.LOCK);
+			this.fileElements.add(child);
+			
+			//set parent
+			while(!parent.getFile().equals(
+					child.getFile().getParentFile()))
+				parent= parent.getParent();
+			child.setParent(parent);
+			
+			if(f.isDirectory())
+				parent= child;
+			
+			//set next
+			pointer.setNext(child);
+			pointer= child;
 		}
 		
+		for(FileElement fe: this.fileElements)
+			this.unlockedList.add(fe.panel);
 		this.unlockedList.revalidate();
 		this.unlockedList.repaint();
+	}
+	
+	public ArrayList<FileElement> getFileElements() {
+		return this.fileElements;
 	}
 	
 	// singleton

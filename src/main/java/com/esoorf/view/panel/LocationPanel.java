@@ -2,6 +2,7 @@ package com.esoorf.view.panel;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -11,6 +12,7 @@ import javax.swing.event.MouseInputListener;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;
+import com.esoorf.view.component.FootprintElement;
 
 public class LocationPanel {
 	public JSplitPane panel;
@@ -81,6 +83,10 @@ public class LocationPanel {
 								lookupButton.isSelected());
 						DirectoryUtils.getInstance().updateFileGroups();
 						UnlockedPanel.getInstance().updateList();
+						
+						ArrayList<FootprintElement> fpe= new ArrayList<FootprintElement>();
+						fpe.add(new FootprintElement(""));
+						ApplyActionPanel.getInstance().setFootprintElements(fpe);
 					}
 			});
 		

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 public class FileGroup {
 	boolean isLocked;
-	String watermark;
+	String footprint;
 	ArrayList<File> files;
 	
 	//getters and setters
 	public boolean getIsLooked() {
 		return this.isLocked;
 	}
-	public String getWatermark() {
-		return this.watermark;
+	public String getFootprint() {
+		return this.footprint;
 	}
 	public ArrayList<File> getFiles() {
 		return this.files;
@@ -22,8 +22,8 @@ public class FileGroup {
 	public void setIsLooked(boolean b) {
 		this.isLocked= b;
 	}
-	public void setWatermark(String s) {
-		this.watermark= s;
+	public void setFootprint(String s) {
+		this.footprint= s;
 	}
 	public void setFiles(ArrayList<File> arr) {
 		this.files= arr;
