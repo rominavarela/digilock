@@ -9,22 +9,22 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import com.esoorf.constant.Actions;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;
 import com.esoorf.view.component.FileElement;
+import com.esoorf.view.component.UnlockedFileElement;
 
 public class UnlockedPanel {
 	public JSplitPane panel;
 	
-	private JLabel titleLabel;
-	private JPanel titlePanel;
+	JLabel titleLabel;
+	JPanel titlePanel;
 	
-	private JPanel unlockedList;
-	private JScrollPane unlockedPane;
+	JPanel unlockedList;
+	JScrollPane unlockedPane;
 	
-	private ArrayList<FileElement> fileElements;
+	ArrayList<FileElement> fileElements;
 	
 	UnlockedPanel() {
 		this.panel= new JSplitPane();
@@ -55,8 +55,7 @@ public class UnlockedPanel {
 		this.fileElements.clear();
 		
 		DirectoryUtils dir= DirectoryUtils.getInstance();
-		FileElement root= new FileElement(dir.getWorkingDirectory());
-		root.setActions(Actions.LOCK);
+		FileElement root= new UnlockedFileElement(dir.getWorkingDirectory());
 		this.fileElements.add(root);
 
 		FileElement parent= root;
@@ -64,8 +63,7 @@ public class UnlockedPanel {
 		for(File f:dir.getUnlockedFiles())
 		{
 			//set item
-			FileElement child= new FileElement(f);
-			child.setActions(Actions.LOCK);
+			FileElement child= new UnlockedFileElement(f);
 			this.fileElements.add(child);
 			
 			//set parent

@@ -82,8 +82,14 @@ public class DirectoryUtils {
 					g= new FileGroup();
 					g.setIsLooked(true);
 					g.setFootprint(footprint);
+					g.setUserFootprint(footprint.substring(Offsets.userFootprint, Offsets.hashFootprint));
+					g.setHashFootprint(footprint.substring(Offsets.hashFootprint, Offsets.data));
 					g.setFiles(new ArrayList<File>());
 					this.lockedGroups.add(g);
+					
+
+					System.out.println("fp: "+ g.getUserFootprint());
+					System.out.println("hash: "+ g.getHashFootprint());
 				}
 				
 				g.getFiles().add(f);

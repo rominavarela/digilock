@@ -46,7 +46,7 @@ public class ActionPanel {
 						for(FileElement fe: UnlockedPanel.getInstance().getFileElements())
 						{
 							if(fe.getIsSelected())
-								if(fe.getFile().isFile())
+								if(fe.isFile())
 									selectedElements.add(fe);
 						}
 						
@@ -79,12 +79,14 @@ public class ActionPanel {
 				this.actionButton.setText("LOCK >>");
 				this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				this.panel.setBackground(ColorPalette.hardSelectionBg);
+				this.actionButton.setForeground(ColorPalette.hardSelectionColor);
 				break;
 				
 			case UNLOCK:
 				this.actionButton.setText("<< UNLOCK");
 				this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				this.panel.setBackground(ColorPalette.hardSelectionBg);
+				this.panel.setBackground(ColorPalette.hardSelectionBg2);
+				this.actionButton.setForeground(ColorPalette.hardSelectionColor2);
 				break;
 		}
 	}

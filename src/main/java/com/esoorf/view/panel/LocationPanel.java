@@ -10,6 +10,7 @@ import javax.swing.JSplitPane;
 import javax.swing.event.MouseInputListener;
 
 import com.esoorf.io.DirectoryUtils;
+import com.esoorf.model.FileGroup;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;
 import com.esoorf.view.component.FootprintElement;
@@ -45,9 +46,8 @@ public class LocationPanel {
 				public void mouseExited(MouseEvent e) {}
 				public void mouseEntered(MouseEvent e) {}
 				public void mouseClicked(MouseEvent e) {
-					locationButton.setText(
-							DirectoryUtils.getInstance().chooseDirectory());
-					UnlockedPanel.getInstance().updateList();
+					locationButton.setText(DirectoryUtils.getInstance().chooseDirectory());
+					updateAll();
 				}
 		});
 		
@@ -79,14 +79,7 @@ public class LocationPanel {
 					public void mouseExited(MouseEvent e) {}
 					public void mouseEntered(MouseEvent e) {}
 					public void mouseClicked(MouseEvent e) {
-						DirectoryUtils.getInstance().setRecursiveLookup(
-								lookupButton.isSelected());
-						DirectoryUtils.getInstance().updateFileGroups();
-						UnlockedPanel.getInstance().updateList();
-						
-						ArrayList<FootprintElement> fpe= new ArrayList<FootprintElement>();
-						fpe.add(new FootprintElement(""));
-						ApplyActionPanel.getInstance().setFootprintElements(fpe);
+						updateAll();
 					}
 			});
 		
@@ -108,6 +101,25 @@ public class LocationPanel {
 		this.panel.setTopComponent(this.locationPane);
 		this.panel.setBottomComponent(this.lookupPane);
 		this.panel.setDividerSize(0);
+	}
+	
+	public void updateAll(){
+		DirectoryUtils dir = DirectoryUtils.getInstance();
+		dir.setRecursiveLookup(lookupButton.isSelected());
+		dir.updateFileGroups();
+		
+		UnlockedPanel.getInstance().updateList();
+		LockedPanel.getInstance().updateList();
+		
+		ArrayList<FootprintElement> fpe= new ArrayList<FootprintElement>();
+		fpe.add(new FootprintElement(""));
+		for(FileGroup lockedGroup: dir.getLockedGroups()){
+			FootprintElement fe= new FootprintElement(lockedGroup.getUserFootprint());
+			fe.setHashFootprint(lockedGroup.getFootprint());
+			fpe.add(fe);
+		}
+		
+		ApplyActionPanel.getInstance().setFootprintElements(fpe);
 	}
 	
 	// singleton

@@ -26,6 +26,7 @@ public class FootprintElement {
 	JPasswordField key1Input;
 	JPasswordField key2Input;
 	
+	String hashFootprint;
 	boolean isSelected;
 	
 	public FootprintElement(String footprint) {
@@ -129,10 +130,16 @@ public class FootprintElement {
 	}
 	
 	//getters and setters
+	public String getHashFootprint() {
+		return this.hashFootprint;
+	}
 	public boolean getIsSelected() {
 		return this.isSelected;
 	}
 	
+	public void setHashFootprint(String s) {
+		this.hashFootprint= s;
+	}
 	public void setIsSelected(boolean b) {
 		this.isSelected= b;
 		if(this.isSelected)
@@ -155,6 +162,11 @@ public class FootprintElement {
 					this.footprintInput.setText("my-footprint");
 				this.footprintInput.requestFocus();
 				this.footprintInput.selectAll();
+			}
+			else
+			{
+				this.key1Input.requestFocus();
+				this.key1Input.selectAll();
 			}
 			
 			this.panel.revalidate();

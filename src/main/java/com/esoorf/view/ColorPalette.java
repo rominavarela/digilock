@@ -6,15 +6,19 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 
 public class ColorPalette {
-	public static Color primaryColor= new Color(130, 40, 120);
+	public static Color primaryColor= new Color(111, 0, 111);
 	public static Color secondaryColor= new Color(100, 100, 100);
 	public static Color contentColor= new Color(50, 50, 50);
 	public static Color hardSelectionColor= new Color(250,250,250);
 	public static Color softSelectionColor= new Color(0,0,0);
+	public static Color hardSelectionColor2= new Color(250,250,250);
+	public static Color softSelectionColor2= new Color(250,250,250);
 	
 	public static Color bgColor= new Color(250, 250, 250);
 	public static Color hardSelectionBg= new Color(0,222,222);
 	public static Color softSelectionBg= new Color(0,222,222);
+	public static Color hardSelectionBg2= new Color(111,0,111);
+	public static Color softSelectionBg2= new Color(111,0,111);
 	
 	public static Border border= BorderFactory.createMatteBorder(1, 1, 1, 1, bgColor);
 	public static Border grossBorder= BorderFactory.createMatteBorder(10, 0, 10, 0, bgColor);
