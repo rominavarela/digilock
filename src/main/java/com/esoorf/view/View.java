@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import com.esoorf.enums.Views;
+import com.esoorf.constant.Views;
 import com.esoorf.view.component.FootprintElement;
 import com.esoorf.view.panel.ActionPanel;
 import com.esoorf.view.panel.ApplyActionPanel;

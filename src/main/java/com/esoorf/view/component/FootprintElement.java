@@ -91,6 +91,12 @@ public class FootprintElement {
 			this.footprintInput.selectAll();
 			return null;
 		}
+		else if(footprint.length()>22)
+		{
+			JOptionPane.showMessageDialog(null, "Footprint name is too long (max 22)");
+			this.footprintInput.selectAll();
+			return null;
+		}
 		
 		return footprint;
 	}

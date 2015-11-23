@@ -1,10 +1,13 @@
 package com.esoorf.io;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
+import com.esoorf.constant.Offsets;
+import com.esoorf.constant.Words;
 import com.esoorf.model.FileGroup;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.IO;
 
@@ -14,7 +17,7 @@ public class DirectoryUtils {
 	ArrayList<File> unlockedFiles;
 	boolean recursiveLookup;
 	
-	DirectoryUtils(){
+	DirectoryUtils() {
 		File ROOT = new File(IO.class.getResource("/").getFile());
 		this.workingDirectory=new File(ROOT.getAbsolutePath().replace("%20", " "));
 		
@@ -24,8 +27,7 @@ public class DirectoryUtils {
 		this.updateFileGroups();
 	}
 	
-	public String chooseDirectory()
-	{
+	public String chooseDirectory() {
 		JFileChooser chooser = new JFileChooser(); 
 	    //chooser.setDialogTitle("Pick your flash direction.");
 	    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -38,8 +40,7 @@ public class DirectoryUtils {
 		return this.workingDirectory.getAbsolutePath();
 	}
 	
-	public ArrayList<File> getDirectoryContent(File dir, boolean recursiveLookup)
-	{
+	public ArrayList<File> getDirectoryContent(File dir, boolean recursiveLookup) {
 		ArrayList<File> content = new ArrayList<File>();
 		
 		if ( dir.exists() && dir.isDirectory() )
@@ -55,7 +56,7 @@ public class DirectoryUtils {
 		return content;
 	}
 	
-	public void updateFileGroups(){
+	public void updateFileGroups() {
 		this.lockedGroups.clear();
 		this.unlockedFiles.clear();
 		
@@ -63,36 +64,51 @@ public class DirectoryUtils {
 				this.workingDirectory,
 				this.recursiveLookup);
 		
-		int i=0;
-		boolean flag= false;
-		for(File f:files){
-			if(flag)
+		String footprint="";
+		for(File f:files)
+			if((footprint=getFootprint(f)).isEmpty())
+				this.unlockedFiles.add(f);
+			else
 			{
-				String watermark= "watermark"+i;
-				i= (i+1)%3;
+				System.out.println("footprint: "+ footprint);
 				
 				FileGroup g= null;
 				for(FileGroup group: this.lockedGroups)
-					if(group.getFootprint().contentEquals(watermark))
+					if(group.getFootprint().contentEquals(footprint))
 						g= group;
 				
 				if(g==null)
 				{
 					g= new FileGroup();
 					g.setIsLooked(true);
-					g.setFootprint(watermark);
+					g.setFootprint(footprint);
 					g.setFiles(new ArrayList<File>());
 					this.lockedGroups.add(g);
 				}
 				
 				g.getFiles().add(f);
 			}
-			else
-				this.unlockedFiles.add(f);
-			
-			//flag= !flag;
-		}
 		
+	}
+	
+	public String getFootprint(File f) {
+		try
+		{
+			FileInputStream		fin=  null;
+			byte[] 				footprintBytes= null;
+			
+			footprintBytes = new byte[Offsets.data];
+			fin = new FileInputStream(f);
+		    fin.read(footprintBytes,0,Offsets.data);
+		    fin.close();
+		    
+		    String footprint= new String(footprintBytes);
+		    if(footprint.startsWith(Words.DigiLock.name()))
+		    	return footprint;
+		    
+		} catch(Exception ex){ }
+		
+		return "";
 	}
 	
 	//getters and setters

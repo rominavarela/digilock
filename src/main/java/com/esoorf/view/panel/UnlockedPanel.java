@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import com.esoorf.enums.Actions;
+import com.esoorf.constant.Actions;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;

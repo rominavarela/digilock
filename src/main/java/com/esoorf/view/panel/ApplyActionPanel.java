@@ -12,8 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 
-import com.esoorf.enums.Actions;
-import com.esoorf.enums.Views;
+import com.esoorf.constant.Actions;
+import com.esoorf.constant.Views;
 import com.esoorf.io.FileLocker;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;
@@ -152,7 +152,6 @@ public class ApplyActionPanel {
 		switch(this.actions)
 		{
 			case LOCK:
-				FileLocker locker= FileLocker.getInstance();
 				String footprint= null;
 				String key= null;
 				for(FootprintElement fpe: this.getFootprintElements())
@@ -168,10 +167,15 @@ public class ApplyActionPanel {
 				if(footprint==null || key==null)
 					return;
 				
-				for(FileElement fe: this.selectedElements)
+				//
+				try
 				{
-					locker.lock(key, fe.getFile());
+					FileLocker locker= new FileLocker(footprint,key);
+					for(FileElement fe: this.selectedElements)
+						locker.lock(fe.getFile());
 				}
+				catch(Exception ex){}
+				
 				
 				break;
 			

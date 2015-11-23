@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 import javax.swing.event.MouseInputListener;
 
-import com.esoorf.enums.Actions;
+import com.esoorf.constant.Actions;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.FontPalette;

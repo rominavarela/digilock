@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.esoorf.enums.Actions;
-import com.esoorf.enums.Views;
+import com.esoorf.constant.Actions;
+import com.esoorf.constant.Views;
 import com.esoorf.view.ColorPalette;
 import com.esoorf.view.View;
 import com.esoorf.view.component.FileElement;
