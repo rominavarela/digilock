@@ -1,5 +1,6 @@
-package com.esoorf.view.component;
+package com.esoorf.view.impl.element.impl;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -9,12 +10,13 @@ import javax.swing.JSplitPane;
 import javax.swing.event.MouseInputListener;
 
 import com.esoorf.constant.Actions;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.FontPalette;
-import com.esoorf.view.panel.ActionPanel;
+import com.esoorf.view.impl.element.Element;
+import com.esoorf.view.impl.panel.impl.ActionPanel;
+import com.esoorf.view.palette.Palette;
 
-public abstract class FileElement {
+public abstract class FileElement implements Element{
 	public JSplitPane panel;
+	Palette palette;
 	
 	JLabel prefixLabel;
 	JLabel sufixLabel;
@@ -28,16 +30,18 @@ public abstract class FileElement {
 	Actions actions;
 	
 	public FileElement(){
+		this.palette = this.getPalette();
+		
 		this.panel= new JSplitPane();
 		this.panel.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.panel.setBorder(ColorPalette.softBorder);
+		this.panel.setBorder(palette.getBorder(0, 0, 1, 0));
 		
 		this.prefixLabel= new JLabel(prefix);
-		this.prefixLabel.setFont(FontPalette.subtitleFont);
+		this.prefixLabel.setFont(palette.getSubFont());
 		
 		this.sufixLabel= new JLabel(sufix);
-		this.sufixLabel.setFont(FontPalette.contentFont);
+		this.sufixLabel.setFont(palette.getFont());
 		
 		this.setIsSelected(false);
 		this.panel.addMouseListener(new MouseInputListener() {
@@ -51,7 +55,9 @@ public abstract class FileElement {
 				isSelected= !isSelected;
 				deselectedOthers();
 				setIsSelected(isSelected);
-				ActionPanel.getInstance().setActions(actions);
+				ActionPanel ap = ActionPanel.getInstance();
+				ap.setActions(actions);
+				ap.setPalette(palette);
 			}
 		});
 		
@@ -77,6 +83,10 @@ public abstract class FileElement {
 	}
 	
 	//getters and setters
+	public Component getPanel() {
+		return this.panel;
+	}
+	
 	public FileElement getParent() {
 		return this.parent;
 	}

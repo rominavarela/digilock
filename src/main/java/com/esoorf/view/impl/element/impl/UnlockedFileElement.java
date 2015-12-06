@@ -1,14 +1,15 @@
-package com.esoorf.view.component;
+package com.esoorf.view.impl.element.impl;
 
 import java.io.File;
 
 import com.esoorf.constant.Actions;
 import com.esoorf.io.DirectoryUtils;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.panel.LockedPanel;
+import com.esoorf.view.impl.panel.impl.LockedPanel;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.UnlockedPalette;
 
 public class UnlockedFileElement extends FileElement{
-
+	
 	public UnlockedFileElement(File f){
 		super();
 		this.setActions(Actions.LOCK);
@@ -40,6 +41,15 @@ public class UnlockedFileElement extends FileElement{
 		else
 			this.sufixLabel.setText(sufix);
 		
+		this.setPalette(new UnlockedPalette());
+	}
+	
+	public Palette getPalette() {
+		return new UnlockedPalette();
+	}
+	
+	public void setPalette(Palette p) {
+		this.palette= p;
 	}
 	
 	@Override
@@ -48,30 +58,22 @@ public class UnlockedFileElement extends FileElement{
 		
 		if(this.isSelected)
 		{
+			this.panel.setBackground(palette.getActiveBackground());
 			if(this.isDirectory())
-			{
-				this.panel.setBackground(ColorPalette.hardSelectionBg);
-				this.prefixLabel.setForeground(ColorPalette.hardSelectionColor);
-				this.prefixLabel.setBorder(ColorPalette.hardSelectionTopSpace);
-				this.sufixLabel.setForeground(ColorPalette.hardSelectionColor);
-				this.sufixLabel.setBorder(ColorPalette.hardSelectionBottomSpace);
-			}
-			else
-			{
-				this.panel.setBackground(ColorPalette.softSelectionBg);
-				this.prefixLabel.setForeground(ColorPalette.softSelectionColor);
-				this.prefixLabel.setBorder(ColorPalette.softSelectionTopSpace);
-				this.sufixLabel.setForeground(ColorPalette.softSelectionColor);
-				this.sufixLabel.setBorder(ColorPalette.softSelectionBottomSpace);
-			}
+				this.panel.setBorder(palette.getActiveBorder(0, 0, 1, 0));
+			this.prefixLabel.setForeground(palette.getActiveForeground());
+			this.prefixLabel.setBorder(palette.getActiveBorder(10, 0, 0, 0));
+			this.sufixLabel.setForeground(palette.getActiveForeground());
+			this.sufixLabel.setBorder(palette.getActiveBorder(0, 0, 10, 0));
 		}
 		else
 		{
-			this.panel.setBackground(ColorPalette.bgColor);
-			this.prefixLabel.setForeground(ColorPalette.contentColor);
-			this.prefixLabel.setBorder(ColorPalette.topSpace);
-			this.sufixLabel.setForeground(ColorPalette.contentColor);
-			this.sufixLabel.setBorder(ColorPalette.bottomSpace);
+			this.panel.setBackground(palette.getBackground());
+			this.panel.setBorder(palette.getBorder(0, 0, 1, 0));
+			this.prefixLabel.setForeground(palette.getForeground());
+			this.prefixLabel.setBorder(palette.getBorder(10, 0, 0, 0));
+			this.sufixLabel.setForeground(palette.getForeground());
+			this.sufixLabel.setBorder(palette.getBorder(0, 0, 10, 0));
 		}
 		
 		if(this.isDirectory())

@@ -9,7 +9,6 @@ import javax.swing.JFileChooser;
 import com.esoorf.constant.Offsets;
 import com.esoorf.constant.Words;
 import com.esoorf.model.FileGroup;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.IO;
 
 public class DirectoryUtils {
 	File workingDirectory;
@@ -18,7 +17,11 @@ public class DirectoryUtils {
 	boolean recursiveLookup;
 	
 	DirectoryUtils() {
-		File ROOT = new File(IO.class.getResource("/").getFile());
+		String absolutePath = 
+				getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        absolutePath = absolutePath.substring(0, absolutePath.lastIndexOf("/"));
+        
+		File ROOT = new File(absolutePath);
 		this.workingDirectory=new File(ROOT.getAbsolutePath().replace("%20", " "));
 		
 		this.lockedGroups= new ArrayList<FileGroup>();

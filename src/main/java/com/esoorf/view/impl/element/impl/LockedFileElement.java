@@ -1,13 +1,14 @@
-package com.esoorf.view.component;
+package com.esoorf.view.impl.element.impl;
 
 import java.io.File;
 
 import com.esoorf.constant.Actions;
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.model.FileGroup;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.panel.LockedPanel;
-import com.esoorf.view.panel.UnlockedPanel;
+import com.esoorf.view.impl.panel.impl.LockedPanel;
+import com.esoorf.view.impl.panel.impl.UnlockedPanel;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.LockedPalette;
 
 public class LockedFileElement extends FileElement{
 	
@@ -20,8 +21,8 @@ public class LockedFileElement extends FileElement{
 		
 		this.prefixLabel.setText(prefix);
 		this.sufixLabel.setText(sufix);
-		
-		this.panel.setBorder(ColorPalette.topSpace);
+
+		this.setPalette(new LockedPalette());
 	}
 	
 	public LockedFileElement(File f) {
@@ -54,32 +55,36 @@ public class LockedFileElement extends FileElement{
 			this.panel.setDividerLocation(40);
 		else
 			this.sufixLabel.setText("      "+sufix);
+		
+		this.setPalette(new LockedPalette());
 	}
 
+	public Palette getPalette() {
+		return new LockedPalette();
+	}
+	
+	public void setPalette(Palette p) {
+		this.palette= p;
+	}
+	
 	@Override
 	public void setIsSelected(boolean b) {
 		this.isSelected= b;
 		
 		if(this.isSelected)
 		{
-			if(this.isFile())
-			{
-				this.panel.setBackground(ColorPalette.softSelectionBg2);
-				this.prefixLabel.setForeground(ColorPalette.softSelectionColor2);
-				this.sufixLabel.setForeground(ColorPalette.softSelectionColor2);
-			}
-			else
-			{
-				this.panel.setBackground(ColorPalette.hardSelectionBg2);
-				this.prefixLabel.setForeground(ColorPalette.hardSelectionColor2);
-				this.sufixLabel.setForeground(ColorPalette.hardSelectionColor2);
-			}
+			this.panel.setBackground(this.palette.getActiveBackground());
+			if(!this.isFile())
+				this.panel.setBorder(palette.getActiveBorder(0, 0, 1, 0));
+			this.prefixLabel.setForeground(this.palette.getActiveForeground());
+			this.sufixLabel.setForeground(this.palette.getActiveForeground());
 		}
 		else
 		{
-			this.panel.setBackground(ColorPalette.bgColor);
-			this.prefixLabel.setForeground(ColorPalette.contentColor);
-			this.sufixLabel.setForeground(ColorPalette.contentColor);
+			this.panel.setBackground(this.palette.getBackground());
+			this.panel.setBorder(palette.getBorder(0, 0, 1, 0));
+			this.prefixLabel.setForeground(this.palette.getForeground());
+			this.sufixLabel.setForeground(this.palette.getForeground());
 		}
 		
 		if(!this.isFile())

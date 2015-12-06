@@ -1,4 +1,4 @@
-package com.esoorf.view.panel;
+package com.esoorf.view.impl.panel.impl;
 
 import java.awt.Cursor;
 import java.awt.GridLayout;
@@ -15,13 +15,15 @@ import javax.swing.JTextArea;
 import com.esoorf.constant.Actions;
 import com.esoorf.constant.Views;
 import com.esoorf.io.FileLocker;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.FontPalette;
-import com.esoorf.view.View;
-import com.esoorf.view.component.FileElement;
-import com.esoorf.view.component.FootprintElement;
+import com.esoorf.view.impl.ViewImpl;
+import com.esoorf.view.impl.element.impl.FileElement;
+import com.esoorf.view.impl.element.impl.FootprintElement;
+import com.esoorf.view.impl.panel.Panel;
+import com.esoorf.view.palette.Palette;
 
-public class ApplyActionPanel {
+public class ApplyActionPanel implements Panel{
+	Palette palette;
+	
 	public JPanel panel;
 	public JSplitPane lPanel;
 	public JSplitPane rPanel;
@@ -48,14 +50,9 @@ public class ApplyActionPanel {
 	ArrayList<FootprintElement> footprintElements;
 	
 	ApplyActionPanel() {
-		
-		//
 		this.listLabel= new JLabel("Selected files:");
-		this.listLabel.setForeground(ColorPalette.contentColor);
-		this.listLabel.setFont(FontPalette.contentFont);
 		this.listPanel= new JPanel();
 		this.listPanel.add(listLabel);
-		this.listPanel.setBackground(ColorPalette.bgColor);
 		
 		this.fileList= new JTextArea();
 		this.fileList.setEditable(false);
@@ -63,7 +60,6 @@ public class ApplyActionPanel {
 		
 		this.lPanel= new JSplitPane();
 		this.lPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		this.lPanel.setBorder(ColorPalette.border);
 		this.lPanel.setDividerSize(0);
 		
 		this.lPanel.setTopComponent(this.listPanel);
@@ -71,11 +67,8 @@ public class ApplyActionPanel {
 		
 		//
 		this.footprintLabel= new JLabel("Footprint:");
-		this.footprintLabel.setForeground(ColorPalette.contentColor);
-		this.footprintLabel.setFont(FontPalette.contentFont);
 		this.footprintPanel= new JPanel();
 		this.footprintPanel.add(footprintLabel);
-		this.footprintPanel.setBackground(ColorPalette.bgColor);
 		
 		this.footprintList= new JPanel();
 		this.footprintList.setLayout(new GridLayout(0, 1));
@@ -84,7 +77,6 @@ public class ApplyActionPanel {
 		
 		this.panelTop= new JSplitPane();
 		this.panelTop.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		this.panelTop.setBorder(ColorPalette.border);
 		this.panelTop.setDividerSize(0);
 		
 		this.panelTop.setTopComponent(this.footprintPanel);
@@ -104,15 +96,12 @@ public class ApplyActionPanel {
 		
 		this.actionPanel= new JPanel();
 		this.actionPanel.add(actionButton);
-		this.actionPanel.setBorder(ColorPalette.grossBorder);
 		this.actionPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.actionPanel.setBackground(ColorPalette.hardSelectionBg);
 		
 		this.cancelButton= new JLabel("cancel");
 		
 		this.cancelPanel= new JPanel();
 		this.cancelPanel.add(cancelButton);
-		this.cancelPanel.setBorder(ColorPalette.grossBorder);
 		this.cancelPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.cancelPanel.addMouseListener(new MouseListener() {
 			public void mouseReleased(MouseEvent e) {}
@@ -120,12 +109,11 @@ public class ApplyActionPanel {
 			public void mouseExited(MouseEvent e) {}
 			public void mouseEntered(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {
-				View.getInstance().setView(Views.MAIN);
+				ViewImpl.getInstance().setView(Views.MAIN);
 			}
 		});
 		
 		this.panelBottom= new JPanel();
-		this.panelBottom.setBorder(ColorPalette.border);
 		this.panelBottom.setLayout(new GridLayout(1, 0));
 		
 		this.panelBottom.add(this.cancelPanel);
@@ -134,14 +122,12 @@ public class ApplyActionPanel {
 		//
 		this.rPanel= new JSplitPane();
 		this.rPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		this.rPanel.setBorder(ColorPalette.border);
 		this.rPanel.setDividerSize(0);
 		
 		this.rPanel.setTopComponent(this.panelTop);
 		this.rPanel.setBottomComponent(this.panelBottom);
 		
 		this.panel= new JPanel();
-		this.panel.setBorder(ColorPalette.border);
 		this.panel.setLayout(new GridLayout(1, 0));
 		this.panel.add(this.lPanel);
 		this.panel.add(this.rPanel);
@@ -185,6 +171,12 @@ public class ApplyActionPanel {
 	}
 	
 	//getters and setters
+	public JPanel getPanel() {
+		return this.panel;
+	}
+	public Palette getPalette() {
+		return this.palette;
+	}
 	public Actions getActions() {
 		return this.actions;
 	}
@@ -195,6 +187,26 @@ public class ApplyActionPanel {
 		return this.footprintElements;
 	}
 	
+	public void setPalette(Palette p) {
+		this.palette= p;
+
+		this.listLabel.setFont(palette.getFont());
+		this.listLabel.setForeground(palette.getForeground());
+		this.listPanel.setBackground(palette.getBackground());
+		this.lPanel.setBorder(palette.getBorder());
+		this.footprintLabel.setFont(palette.getFont());
+		this.footprintLabel.setForeground(palette.getForeground());
+		this.footprintPanel.setBackground(palette.getBackground());
+		this.panelTop.setBorder(palette.getBorder());
+		this.actionPanel.setBorder(palette.getBorder(10, 0, 10, 0));
+		this.actionPanel.setBackground(palette.getActiveBackground());
+		this.actionPanel.setForeground(palette.getActiveForeground());
+		this.cancelPanel.setBorder(palette.getBorder(10, 0, 10, 0));
+		this.panelBottom.setBorder(palette.getBorder());
+		this.rPanel.setBorder(palette.getBorder());
+		this.panel.setBorder(palette.getBorder());
+		
+	}
 	public void setActions(Actions a) {
 		this.actions= a;
 		this.actionButton.setText(a.name());

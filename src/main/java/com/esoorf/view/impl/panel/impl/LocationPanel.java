@@ -1,5 +1,6 @@
-package com.esoorf.view.panel;
+package com.esoorf.view.impl.panel.impl;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -11,11 +12,14 @@ import javax.swing.event.MouseInputListener;
 
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.model.FileGroup;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.FontPalette;
-import com.esoorf.view.component.FootprintElement;
+import com.esoorf.view.impl.element.impl.FootprintElement;
+import com.esoorf.view.impl.panel.Panel;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.MainPalette;
 
-public class LocationPanel {
+public class LocationPanel implements Panel{
+	Palette palette;
+	
 	public JSplitPane panel;
 	
 	public JSplitPane locationPane;
@@ -27,15 +31,9 @@ public class LocationPanel {
 	JCheckBox lookupButton;
 	
 	LocationPanel() {
-		
-		//
 		this.locationLabel= new JLabel("Location:   ");
-		this.locationLabel.setFont(FontPalette.contentFont);
-		this.locationLabel.setForeground(ColorPalette.contentColor);
 		
 		this.locationButton= new JLabel(DirectoryUtils.getInstance().getWorkingDirectory().getAbsolutePath());
-		this.locationButton.setFont(FontPalette.contentFont);
-		this.locationButton.setForeground(ColorPalette.contentColor);
 		this.locationButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.locationButton.addMouseListener(
 			new MouseInputListener() {
@@ -53,8 +51,6 @@ public class LocationPanel {
 		
 		this.locationPane= new JSplitPane();
 		this.locationPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		this.locationPane.setBorder(ColorPalette.border);
-		this.locationPane.setBackground(ColorPalette.bgColor);
 		
 		this.locationPane.setLeftComponent(this.locationLabel);
 		this.locationPane.setRightComponent(this.locationButton);
@@ -62,13 +58,8 @@ public class LocationPanel {
 		
 		//
 		this.lookupLabel= new JLabel("Lookup:     ");
-		this.lookupLabel.setFont(FontPalette.contentFont);
-		this.lookupLabel.setForeground(ColorPalette.contentColor);
 		
 		this.lookupButton= new JCheckBox("recursive");
-		this.lookupButton.setFont(FontPalette.contentFont);
-		this.lookupButton.setForeground(ColorPalette.contentColor);
-		this.lookupButton.setBackground(ColorPalette.bgColor);
 		this.lookupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.lookupButton.addMouseListener(
 				new MouseInputListener() {
@@ -85,8 +76,6 @@ public class LocationPanel {
 		
 		this.lookupPane= new JSplitPane();
 		this.lookupPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		this.lookupPane.setBorder(ColorPalette.border);
-		this.lookupPane.setBackground(ColorPalette.bgColor);
 		
 		this.lookupPane.setLeftComponent(this.lookupLabel);
 		this.lookupPane.setRightComponent(this.lookupButton);
@@ -95,12 +84,48 @@ public class LocationPanel {
 		//
 		this.panel= new JSplitPane();
 		this.panel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		this.panel.setBorder(ColorPalette.border);
-		this.panel.setBackground(ColorPalette.bgColor);
 		
 		this.panel.setTopComponent(this.locationPane);
 		this.panel.setBottomComponent(this.lookupPane);
 		this.panel.setDividerSize(0);
+		
+		this.setPalette(new MainPalette());
+	}
+	
+	public Component getPanel() {
+		return this.panel;
+	}
+
+	public Palette getPalette() {
+		return this.palette;
+	}
+	
+	public void setPalette(Palette p) {
+		this.palette= p;
+		
+		this.locationLabel.setFont(palette.getFont());
+		this.locationLabel.setForeground(palette.getActiveForeground());
+		
+		this.locationButton.setFont(palette.getFont());
+		this.locationButton.setForeground(palette.getActiveForeground());
+		
+		this.locationPane.setBorder(palette.getBorder());
+		this.locationPane.setBackground(palette.getBackground());
+		
+		//
+		this.lookupLabel.setFont(palette.getFont());
+		this.lookupLabel.setForeground(palette.getActiveForeground());
+		
+		this.lookupButton.setFont(palette.getFont());
+		this.lookupButton.setForeground(palette.getActiveForeground());
+		this.lookupButton.setBackground(palette.getBackground());
+		
+		this.lookupPane.setBorder(palette.getBorder());
+		this.lookupPane.setBackground(palette.getBackground());
+		
+		//
+		this.panel.setBorder(palette.getBorder());
+		this.panel.setBackground(palette.getBackground());
 	}
 	
 	public void updateAll(){

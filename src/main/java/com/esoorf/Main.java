@@ -2,7 +2,7 @@ package com.esoorf;
 
 import javax.swing.SwingUtilities;
 
-import com.esoorf.view.View;
+import com.esoorf.view.impl.ViewImpl;
 
 public class Main {
 	static public void main(String argv[]) 
@@ -10,7 +10,7 @@ public class Main {
 		try{
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					View.getInstance();
+					ViewImpl.getInstance();
 				}
 			});
 		}catch(Exception ex){}

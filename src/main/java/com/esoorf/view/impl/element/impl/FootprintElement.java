@@ -1,5 +1,6 @@
-package com.esoorf.view.component;
+package com.esoorf.view.impl.element.impl;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridLayout;
 
@@ -9,11 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.FontPalette;
+import com.esoorf.view.impl.element.Element;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.MainPalette;
 
-public class FootprintElement {
+public class FootprintElement implements Element{
 	public JPanel panel;
+	Palette palette;
 	
 	public JLabel auxLabel;
 	public JPanel auxPanel;
@@ -30,52 +33,36 @@ public class FootprintElement {
 	boolean isSelected;
 	
 	public FootprintElement(String footprint) {
+		this.palette= new MainPalette();
 		
 		if(footprint.isEmpty())
 			this.auxLabel= new JLabel("+");
 		else
 			this.auxLabel= new JLabel(footprint);
 		
-		this.auxLabel.setForeground(ColorPalette.contentColor);
-		this.auxLabel.setFont(FontPalette.contentFont);
+		this.auxLabel.setFont(palette.getFont());
 		this.auxPanel= new JPanel();
 		this.auxPanel.add(auxLabel);
-		this.auxPanel.setBackground(ColorPalette.bgColor);
 		
 		this.footprintLabel= new JLabel("name:");
-		this.footprintLabel.setForeground(ColorPalette.contentColor);
-		this.footprintLabel.setFont(FontPalette.contentFont);
+		this.footprintLabel.setFont(palette.getFont());
 		this.footprintInput= new JTextField();
 		if(!footprint.isEmpty())
 		{
 			this.footprintInput.setText(footprint);
 			this.footprintInput.setEditable(false);
-			this.footprintInput.setForeground(ColorPalette.secondaryColor);
 		}
-		this.footprintInput.setBorder(ColorPalette.softBorder);
-		this.footprintInput.setForeground(ColorPalette.contentColor);
-		this.footprintInput.setBackground(ColorPalette.hardSelectionBg);
 		
 		this.key1Label= new JLabel("password:");
-		this.key1Label.setForeground(ColorPalette.contentColor);
-		this.key1Label.setFont(FontPalette.contentFont);
+		this.key1Label.setFont(palette.getFont());
 		this.key1Input= new JPasswordField();
-		this.key1Input.setBorder(ColorPalette.softBorder);
-		this.key1Input.setForeground(ColorPalette.hardSelectionColor);
-		this.key1Input.setBackground(ColorPalette.hardSelectionBg);
 		
 		this.key2Label= new JLabel("");
-		this.key2Label.setForeground(ColorPalette.contentColor);
-		this.key2Label.setFont(FontPalette.contentFont);
+		this.key2Label.setFont(palette.getFont());
 		this.key2Input= new JPasswordField();
-		this.key2Input.setBorder(ColorPalette.softBorder);
-		this.key2Input.setForeground(ColorPalette.hardSelectionColor);
-		this.key2Input.setBackground(ColorPalette.hardSelectionBg);
 		
 		this.panel= new JPanel();
 		this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.panel.setBorder(ColorPalette.softBorder);
-		this.panel.setBackground(ColorPalette.bgColor);
 		
 		this.panel.setLayout(new GridLayout(0, 1));
 		this.panel.add(new JLabel(" "));
@@ -130,6 +117,12 @@ public class FootprintElement {
 	}
 	
 	//getters and setters
+	public Component getPanel() {
+		return this.panel;
+	}
+	public Palette getPalette() {
+		return this.palette;
+	}
 	public String getHashFootprint() {
 		return this.hashFootprint;
 	}
@@ -137,9 +130,37 @@ public class FootprintElement {
 		return this.isSelected;
 	}
 	
+	public void setPalette(Palette p){
+		this.palette= p;
+		
+		this.auxLabel.setForeground(palette.getForeground());
+		this.auxPanel.setBackground(palette.getBackground());
+		
+		this.footprintLabel.setForeground(palette.getActiveForeground());
+		this.footprintLabel.setBackground(palette.getActiveBackground());
+		
+		this.footprintInput.setBorder(palette.getBorder(0, 0, 1, 0));
+		this.footprintInput.setForeground(palette.getActiveForeground());
+		this.footprintInput.setBackground(palette.getActiveBackground());
+		
+		this.key1Label.setForeground(palette.getForeground());
+		this.key1Input.setBorder(palette.getBorder(0, 0, 1, 0));
+		this.key1Input.setForeground(palette.getActiveForeground());
+		this.key1Input.setBackground(palette.getActiveBackground());
+		
+		this.key2Label.setForeground(palette.getForeground());
+		this.key2Input.setBorder(palette.getBorder(0, 0, 1, 0));
+		this.key2Input.setForeground(palette.getActiveForeground());
+		this.key2Input.setBackground(palette.getActiveBackground());
+		
+		this.panel.setBorder(palette.getBorder(0, 0, 1, 0));
+		this.panel.setBackground(palette.getBackground());
+	}
+	
 	public void setHashFootprint(String s) {
 		this.hashFootprint= s;
 	}
+	
 	public void setIsSelected(boolean b) {
 		this.isSelected= b;
 		if(this.isSelected)
@@ -153,8 +174,8 @@ public class FootprintElement {
 			this.panel.add(this.key1Input);
 			this.panel.add(this.key2Label);
 			this.panel.add(this.key2Input);
-			this.panel.setBorder(ColorPalette.hardBorder);
-			this.panel.setBackground(ColorPalette.hardSelectionBg);
+			this.panel.setBorder(palette.getActiveBorder(3, 3, 3, 3));
+			this.panel.setBackground(palette.getActiveBackground());
 			
 			if(this.footprintInput.isEditable())
 			{
@@ -180,8 +201,8 @@ public class FootprintElement {
 			this.panel.add(new JLabel(" "));
 			this.panel.add(this.auxPanel);
 			this.panel.add(new JLabel(" "));
-			this.panel.setBorder(ColorPalette.softBorder);
-			this.panel.setBackground(ColorPalette.bgColor);
+			this.panel.setBorder(palette.getActiveBorder(0, 0, 1, 0));
+			this.panel.setBackground(palette.getBackground());
 			
 			this.panel.revalidate();
 			this.panel.repaint();

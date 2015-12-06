@@ -1,4 +1,4 @@
-package com.esoorf.view.panel;
+package com.esoorf.view.impl.panel.impl;
 
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
@@ -10,22 +10,26 @@ import javax.swing.JPanel;
 
 import com.esoorf.constant.Actions;
 import com.esoorf.constant.Views;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.View;
-import com.esoorf.view.component.FileElement;
+import com.esoorf.view.impl.ViewImpl;
+import com.esoorf.view.impl.element.impl.FileElement;
+import com.esoorf.view.impl.panel.Panel;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.MainPalette;
 
-public class ActionPanel {
+public class ActionPanel implements Panel{
 	public JPanel panel;
 	public JLabel actionButton;
 	
 	Actions actions;
+	Palette palette;
 	
 	private ActionPanel() {
 		this.actionButton= new JLabel(" ");
+		this.palette= new MainPalette();
 		
 		this.panel= new JPanel();
 		this.panel.add(actionButton);
-		this.panel.setBorder(ColorPalette.grossBorder);
+		this.panel.setBorder(palette.getBorder(10, 0, 10, 0));
 		this.setActions(Actions.NONE);
 		
 		this.panel.addMouseListener(new MouseListener() {
@@ -52,8 +56,9 @@ public class ActionPanel {
 						
 						ApplyActionPanel aap= ApplyActionPanel.getInstance();
 						aap.setActions(actions);
+						aap.setPalette(palette);
 						aap.setSelectedElements(selectedElements);
-						View.getInstance().setView(Views.APPLY);
+						ViewImpl.getInstance().setView(Views.APPLY);
 						
 						break;
 						
@@ -65,6 +70,24 @@ public class ActionPanel {
 	}
 	
 	//getters and setters
+	public JPanel getPanel() {
+		return this.panel;
+	}
+
+	public Palette getPalette() {
+		return this.palette;
+	}
+	
+	public Actions getAction(){
+		return this.actions;
+	}
+	
+	public void setPalette(Palette p) {
+		this.palette= p;
+		this.panel.setBackground(palette.getActiveBackground());
+		this.actionButton.setForeground(palette.getActiveForeground());
+	}
+	
 	public void setActions(Actions a){
 		this.actions= a;
 		switch(actions)
@@ -72,27 +95,18 @@ public class ActionPanel {
 			case NONE:
 				this.actionButton.setText("");
 				this.panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				this.panel.setBackground(ColorPalette.bgColor);
 				break;
 				
 			case LOCK:
 				this.actionButton.setText("LOCK >>");
 				this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				this.panel.setBackground(ColorPalette.hardSelectionBg);
-				this.actionButton.setForeground(ColorPalette.hardSelectionColor);
 				break;
 				
 			case UNLOCK:
 				this.actionButton.setText("<< UNLOCK");
 				this.panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-				this.panel.setBackground(ColorPalette.hardSelectionBg2);
-				this.actionButton.setForeground(ColorPalette.hardSelectionColor2);
 				break;
 		}
-	}
-	
-	public Actions getAction(){
-		return this.actions;
 	}
 	
 	// singleton

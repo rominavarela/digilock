@@ -1,5 +1,6 @@
-package com.esoorf.view.panel;
+package com.esoorf.view.impl.panel.impl;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.ArrayList;
@@ -11,13 +12,15 @@ import javax.swing.JSplitPane;
 
 import com.esoorf.io.DirectoryUtils;
 import com.esoorf.model.FileGroup;
-import com.esoorf.view.ColorPalette;
-import com.esoorf.view.FontPalette;
-import com.esoorf.view.component.FileElement;
-import com.esoorf.view.component.LockedFileElement;
+import com.esoorf.view.impl.element.impl.FileElement;
+import com.esoorf.view.impl.element.impl.LockedFileElement;
+import com.esoorf.view.impl.panel.Panel;
+import com.esoorf.view.palette.Palette;
+import com.esoorf.view.palette.impl.LockedPalette;
 
-public class LockedPanel {
+public class LockedPanel implements Panel{
 	public JSplitPane panel;
+	Palette palette;
 	
 	JLabel titleLabel;
 	JPanel titlePanel;
@@ -27,17 +30,13 @@ public class LockedPanel {
 	
 	ArrayList<FileElement> fileElements;
 	
-	LockedPanel() {
+	LockedPanel() {		
 		this.panel= new JSplitPane();
 		this.panel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		this.panel.setBorder(ColorPalette.border);
 		
 		this.titleLabel= new JLabel("Locked");
-		this.titleLabel.setForeground(ColorPalette.contentColor);
-		this.titleLabel.setFont(FontPalette.contentFont);
 		this.titlePanel= new JPanel();
 		this.titlePanel.add(titleLabel);
-		this.titlePanel.setBackground(ColorPalette.bgColor);
 		
 		this.lockedList= new JPanel();
 		this.lockedList.setLayout(new GridLayout(0, 1));
@@ -49,6 +48,16 @@ public class LockedPanel {
 		this.panel.setTopComponent(this.titlePanel);
 		this.panel.setBottomComponent(this.lockedPane);
 		this.panel.setDividerSize(0);
+		
+		this.setPalette(new LockedPalette());
+	}
+	
+	public Component getPanel() {
+		return this.panel;
+	}
+
+	public Palette getPalette() {
+		return this.palette;
 	}
 	
 	public void updateList() {
@@ -84,6 +93,16 @@ public class LockedPanel {
 	
 	public ArrayList<FileElement> getFileElements() {
 		return this.fileElements;
+	}
+	
+	public void setPalette(Palette p) {
+		this.palette= p;
+		
+		this.panel.setBorder(palette.getBorder());
+		
+		this.titleLabel.setForeground(palette.getForeground());
+		this.titleLabel.setFont(palette.getFont());
+		this.titlePanel.setBackground(palette.getBackground());
 	}
 	
 	// singleton
